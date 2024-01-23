@@ -1,0 +1,11 @@
+Setup
+To set up and run the project, follow these steps:
+
+1) Install MySQL
+2) Configure the database properties and directory for saving images in "application.properties".
+3) Build the News project using the following command:
+mvn clean package
+4) Run the project:
+java -jar target/news-0.0.1.jar
+5) Access the application in your browser at:
+http://localhost:8080/news
