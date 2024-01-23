@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create News</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/createNews_styles.css}" />
+</head>
+<body>
+<h1>Create News</h1>
+<div>
+    <!-- Form for creating news -->
+    <form method="POST" th:action="@{/news}" th:object="${news}" enctype="multipart/form-data">
+        <label for="header">Header:</label>
+        <input type="text" th:field="*{header}" id="header"/>
+        <div class="error" th:if="${#fields.hasErrors('header')}" th:errors="*{header}" style="error"></div><br>
+
+        <label for="body">Body:</label>
+        <textarea class="text" th:field="*{body}" id="body" name="body"></textarea>
+        <div class="error" th:if="${#fields.hasErrors('body')}" th:errors="*{body}"></div><br>
+
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image" onchange="validateFile()"/>
+        <div class="error" id="imageError" ></div>
+
+        <!-- Display general error message -->
+        <div th:if="${errorMessage}" class="error">
+            <p th:text="${errorMessage}"></p>
+        </div>
+
+        <button type="submit">Create News</button>
+    </form>
+
+    <!-- JavaScript function to validate image file -->
+    <script>
+        function validateFile() {
+            var fileInput = document.getElementById('image');
+            var filePath = fileInput.value;
+            var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+            var imageError = document.getElementById('imageError');
+
+            if (!allowedExtensions.exec(filePath)) {
+                imageError.innerText = 'Please upload a file with extensions .jpeg, .jpg, .png, .gif only.';
+                fileInput.value = '';
+                return false;
+            } else {
+                imageError.innerText = '';
+                return true;
+            }
+        }
+    </script>
+</div>
+</body>
+</html>

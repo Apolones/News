@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Feed</title>
+    <link rel="stylesheet" th:href="@{/css/news_styles.css}" />
+</head>
+<body>
+<div class="header">
+    <h1>News Feed</h1>
+    <a th:href="@{/createNews}">Create news</a>
+</div>
+
+<!-- Displaying news -->
+<div th:each="news : ${newsPage}" class="news">
+    <div>
+        <h3 th:text="${news.header}"></h3>
+        <p th:text="${news.body}"></p>
+        <p th:text="${news.data}" class="data"></p>
+    </div>
+    <img th:if="${news.image_path}" th:src="@{'/images/' + ${news.image_path}}" alt="Image not found" width="100" height="100"/>
+</div>
+
+<!-- Pagination -->
+<div>
+    <span>Page <span th:text="${newsPage.number + 1}"></span> of <span th:text="${newsPage.totalPages}"></span></span>
+    <span> | </span>
+    <span>Total news: <span th:text="${newsPage.totalElements}"></span></span>
+</div>
+
+<!-- Links to previous and next page -->
+<div>
+    <span th:unless="${newsPage.first}" th:remove="tag">
+        <a th:href="@{'/news?page=' + ${newsPage.previousPageable().pageNumber} + '&size=' + ${newsPage.previousPageable().pageSize}}">Previous</a>
+    </span>
+    <span th:unless="${newsPage.last}" th:remove="tag">
+        <a th:href="@{'/news?page=' + ${newsPage.nextPageable().pageNumber} + '&size=' + ${newsPage.nextPageable().pageSize}}">Next</a>
+    </span>
+</div>
+
+<!-- Dropdown menu for the number of news per page -->
+<div>
+    <form action="#" method="get">
+        <label for="pageSize">News per page:</label>
+        <select id="pageSize" name="size" onchange="this.form.submit()">
+            <option th:value="${10}" th:text="${10}" th:selected="${10 == newsPage.size}"></option>
+            <option th:value="${20}" th:text="${20}" th:selected="${20 == newsPage.size}"></option>
+            <option th:value="${50}" th:text="${50}" th:selected="${50 == newsPage.size}"></option>
+        </select>
+    </form>
+</div>
+</body>
+</html>
